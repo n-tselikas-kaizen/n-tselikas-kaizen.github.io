@@ -1,0 +1,474 @@
+/*
+ * Packs module — shared, UNSCOPED styles for pieces that cross component
+ * boundaries: the pack-visual slash gesture, the flip-card mechanics reused
+ * by both the single-pull reveal and the summary grid, and the escalating
+ * rarity flash/sparkle effects (each summary card is its own component
+ * instance, so a Vue `scoped` block in one wouldn't reach a `:class` toggled
+ * on another). Ported from the prototype's packs.css — colors, timings and
+ * keyframes kept as-is; only the CSS custom-property names were remapped to
+ * this project's --color-* variables. Imported (side-effect only) from
+ * every component that uses these classes; Vite/Rollup dedupes the import.
+ */
+
+/* ---- Metallic-foil pack + slash-to-open gesture ---- */
+.pack-card-face {
+  width: var(--card-w);
+  aspect-ratio: var(--card-ratio);
+  position: relative;
+  cursor: default;
+  touch-action: none;
+  user-select: none;
+  transform-style: preserve-3d;
+  transform: rotateX(8deg) rotateY(-10deg);
+}
+.pack-half {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(
+    115deg,
+    #7a5c1e 0%,
+    #e8c766 14%,
+    #fff6da 24%,
+    #caa53c 34%,
+    #8a6a24 48%,
+    #f2d98a 60%,
+    #b8933a 72%,
+    #fff6da 85%,
+    #7a5c1e 100%
+  );
+  background-size: 280% 280%;
+  animation: metallicSheen 6s ease-in-out infinite;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 22px 46px rgba(0, 0, 0, 0.5),
+    inset 0 2px 10px rgba(255, 255, 255, 0.35),
+    inset 0 -16px 32px rgba(0, 0, 0, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  will-change: transform, opacity;
+}
+.pack-half::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(
+    100deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0.6) 48%,
+    transparent 64%
+  );
+  background-size: 260% 260%;
+  mix-blend-mode: overlay;
+  animation: glareSweep 3.4s ease-in-out infinite;
+}
+@keyframes metallicSheen {
+  0%,
+  100% {
+    background-position: 0% 45%;
+  }
+  50% {
+    background-position: 100% 55%;
+  }
+}
+@keyframes glareSweep {
+  0%,
+  100% {
+    background-position: 130% 0%;
+  }
+  50% {
+    background-position: -30% 100%;
+  }
+}
+.pack-half.b {
+  z-index: 2;
+}
+.pack-half.a {
+  z-index: 3;
+}
+.pack-half .p-theme {
+  position: relative;
+  z-index: 2;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(26, 18, 6, 0.7);
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.pack-half .p-glyph {
+  position: relative;
+  z-index: 2;
+  font-size: 34px;
+  color: var(--color-gold-ink);
+  line-height: 1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.pack-half .p-name {
+  position: relative;
+  z-index: 2;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  color: var(--color-gold-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+/* Impact wobble — fires the instant the cut completes (real slash or the
+   button's auto-slash), snappy on purpose against the slower fly-apart. */
+.pack-card-face.shaking {
+  animation: packShake 0.35s ease;
+}
+@keyframes packShake {
+  0%,
+  100% {
+    transform: rotateX(8deg) rotateY(-10deg) rotate(0deg);
+  }
+  25% {
+    transform: rotateX(8deg) rotateY(-10deg) rotate(-4deg);
+  }
+  50% {
+    transform: rotateX(8deg) rotateY(-10deg) rotate(3deg);
+  }
+  75% {
+    transform: rotateX(8deg) rotateY(-10deg) rotate(-2deg);
+  }
+}
+/* Once cut, each half flies off along its own vector (--flyx/--flyy/--flyr
+   set inline per half) and fades. */
+.pack-half.flying {
+  transition:
+    transform 0.75s cubic-bezier(0.2, 0.85, 0.28, 1),
+    opacity 0.55s ease 0.2s;
+  transform: translate(var(--flyx), var(--flyy)) rotate(var(--flyr));
+  opacity: 0;
+}
+/* Live blade trail while dragging. */
+.pack-trail {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  overflow: visible;
+  opacity: 0;
+}
+.pack-trail.live {
+  opacity: 1;
+}
+/* The flash left behind the instant a valid slash completes. */
+.pack-cut-flash {
+  position: absolute;
+  height: 3px;
+  z-index: 7;
+  pointer-events: none;
+  transform-origin: 0 50%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #fff 15%,
+    var(--color-gold) 50%,
+    #fff 85%,
+    transparent
+  );
+  box-shadow: 0 0 22px 7px rgba(201, 162, 39, 0.85);
+  opacity: 0;
+}
+.pack-cut-flash.show {
+  animation: cutFlash 420ms ease-out forwards;
+}
+@keyframes cutFlash {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---- Single-pull flip card (front = plain silhouette, back = CardFace) ---- */
+.pull-card {
+  width: var(--card-w);
+  aspect-ratio: var(--card-ratio);
+  perspective: 1000px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.pull-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+.pull-card.flipped .pull-card-inner {
+  transform: rotateY(180deg);
+}
+.pull-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  backface-visibility: hidden;
+}
+.pull-face.back {
+  transform: rotateY(180deg);
+}
+
+/* ---- Reveal summary grid (compact, always-flipped cards) ---- */
+.reveal-card {
+  width: 96px;
+  height: 158px;
+  perspective: 700px;
+  position: relative;
+}
+.reveal-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+  transform: rotateY(0deg);
+}
+.reveal-card.flipped .reveal-card-inner {
+  transform: rotateY(180deg);
+}
+.reveal-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  text-align: center;
+  gap: 4px;
+}
+.reveal-back {
+  background: linear-gradient(150deg, #16301f, #0b1710);
+  border: 1px solid var(--color-line-strong);
+}
+.reveal-back::after {
+  content: '?';
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  color: var(--color-ink-faint);
+}
+.reveal-front {
+  transform: rotateY(180deg);
+  border: 2px solid var(--color-line-strong);
+  background: var(--color-panel);
+}
+.reveal-front .rf-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1.2;
+}
+.reveal-front .rf-rar {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.reveal-front .rf-plus {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-gold);
+}
+.reveal-front .rf-no-slot {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.02em;
+  color: var(--color-ink-faint);
+  background: rgba(244, 241, 232, 0.08);
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-top: 2px;
+}
+.rf-new-tag {
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  z-index: 2;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 7.5px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-gold-ink);
+  background: var(--color-gold);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+/* Two rows, 3 over 2 — each card stagger-animates in via --rdelay (set
+   inline per card, i*90ms). */
+.reveal-summary-row .reveal-card {
+  opacity: 0;
+  animation: summaryCardIn 480ms cubic-bezier(0.2, 0.9, 0.28, 1) forwards;
+  animation-delay: var(--rdelay);
+}
+@keyframes summaryCardIn {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.reveal-share-btn {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  z-index: 5;
+  background: var(--color-gold);
+  color: var(--color-gold-ink);
+  border: 1.5px solid var(--color-bg);
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.reveal-share-btn:hover {
+  transform: scale(1.12);
+}
+
+/* ---- Escalating reveal-moment flash — applied to the outer (non-rotating)
+   card element only, never the *-inner element that carries the 3D flip
+   transform (a transform there would fold into that rotation). ---- */
+@keyframes flashRare {
+  0% {
+    box-shadow: 0 0 0 0 rgba(62, 134, 214, 0);
+    filter: brightness(1);
+  }
+  30% {
+    box-shadow: 0 0 28px 8px rgba(62, 134, 214, 0.85);
+    filter: brightness(1.25);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(62, 134, 214, 0);
+    filter: brightness(1);
+  }
+}
+.flash-rare {
+  animation: flashRare 0.7s ease-out;
+}
+@keyframes flashEpic {
+  0% {
+    box-shadow: 0 0 0 0 rgba(177, 95, 224, 0);
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  20% {
+    box-shadow: 0 0 40px 14px rgba(177, 95, 224, 0.9);
+    filter: brightness(1.4);
+    transform: scale(1.05);
+  }
+  45% {
+    box-shadow: 0 0 15px 4px rgba(177, 95, 224, 0.5);
+    filter: brightness(1.1);
+    transform: scale(1);
+  }
+  65% {
+    box-shadow: 0 0 40px 14px rgba(177, 95, 224, 0.85);
+    filter: brightness(1.35);
+    transform: scale(1.04);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(177, 95, 224, 0);
+    filter: brightness(1);
+    transform: scale(1);
+  }
+}
+.flash-epic {
+  animation: flashEpic 1.1s ease-in-out;
+}
+@keyframes flashLegendary {
+  0% {
+    box-shadow: 0 0 0 0 rgba(231, 178, 61, 0);
+    filter: brightness(1) saturate(1);
+    transform: scale(1);
+  }
+  12% {
+    box-shadow: 0 0 55px 20px rgba(231, 178, 61, 1);
+    filter: brightness(1.8) saturate(1.4);
+    transform: scale(1.08);
+  }
+  28% {
+    box-shadow: 0 0 22px 6px rgba(231, 178, 61, 0.6);
+    filter: brightness(1.2);
+    transform: scale(1.01);
+  }
+  42% {
+    box-shadow: 0 0 55px 20px rgba(231, 178, 61, 1);
+    filter: brightness(1.75);
+    transform: scale(1.07);
+  }
+  58% {
+    box-shadow: 0 0 22px 6px rgba(231, 178, 61, 0.6);
+    filter: brightness(1.2);
+    transform: scale(1.01);
+  }
+  74% {
+    box-shadow: 0 0 55px 20px rgba(231, 178, 61, 0.95);
+    filter: brightness(1.7);
+    transform: scale(1.06);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(231, 178, 61, 0);
+    filter: brightness(1) saturate(1);
+    transform: scale(1);
+  }
+}
+.flash-legendary {
+  animation: flashLegendary 1.9s ease-in-out;
+}
+.burst-spark {
+  position: absolute;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 6;
+  animation: burstSparkOut 0.9s ease-out forwards;
+}
+.burst-spark-epic {
+  color: var(--color-rarity-epic);
+  text-shadow: 0 0 8px var(--color-rarity-epic);
+}
+.burst-spark-legendary {
+  color: var(--color-rarity-legendary);
+  text-shadow: 0 0 10px var(--color-rarity-legendary);
+  font-size: 16px;
+}
+@keyframes burstSparkOut {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.3) translateY(-4px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(-18px);
+  }
+}

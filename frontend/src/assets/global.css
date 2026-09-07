@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #0b1710;
+  --color-panel: #122419;
+  --color-panel-raised: #16301f;
+  --color-ink: #f4f1e8;
+  --color-ink-dim: #a2b3a5;
+  --color-ink-faint: #6c7e70;
+  --color-line: rgba(244, 241, 232, 0.09);
+  --color-line-strong: rgba(244, 241, 232, 0.18);
+  --color-gold: #c9a227;
+  --color-gold-ink: #1a1206;
+  --color-rarity-common: #8a96a3;
+  --color-rarity-uncommon: #2fb88f;
+  --color-rarity-rare: #3e86d6;
+  --color-rarity-epic: #b15fe0;
+  --color-rarity-legendary: #e7b23d;
+
+  /* RGB channel triplets, exclusively for Tailwind's rgb(var(...) / <alpha>)
+     opacity-modifier utilities (bg-gold/10, etc). The hex vars above stay
+     the ones used directly in CSS/inline styles (e.g. rarity.color). */
+  --bg-rgb: 11 23 16;
+  --panel-rgb: 18 36 25;
+  --panel-raised-rgb: 22 48 31;
+  --ink-rgb: 244 241 232;
+  --ink-dim-rgb: 162 179 165;
+  --ink-faint-rgb: 108 126 112;
+  --gold-rgb: 201 162 39;
+  --gold-ink-rgb: 26 18 6;
+  --rarity-common-rgb: 138 150 163;
+  --rarity-uncommon-rgb: 47 184 143;
+  --rarity-rare-rgb: 62 134 214;
+  --rarity-epic-rgb: 177 95 224;
+  --rarity-legendary-rgb: 231 178 61;
+
+  /* Card sizing — see modules/cards for usage. --card-w is the detail
+     modal / pack stage size; --card-w-grid is the album slot-grid size. */
+  --card-w: 354px;
+  --card-w-grid: 180px;
+  --card-ratio: 354 / 586;
+  --album-cols: 3;
+}
+
+@media (max-width: 1079px) {
+  :root {
+    --album-cols: 2;
+  }
+}
+@media (max-width: 480px) {
+  :root {
+    --album-cols: 3;
+    --card-w-grid: 96px;
+  }
+}
+@media (max-width: 420px) {
+  :root {
+    --card-w: 320px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 360px;
+  background:
+    radial-gradient(ellipse at top, rgba(201, 162, 39, 0.07), transparent 55%), var(--color-bg);
+  color: var(--color-ink);
+  font-family: 'Inter', sans-serif;
+}
+
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+/* Legendary-tier title treatment — achievement toasts + the Social profile's equipped title. */
+.shimmer-text {
+  background: linear-gradient(100deg, var(--color-gold) 20%, #fff6da 50%, var(--color-gold) 80%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmerSweep 2.4s linear infinite;
+}
+@keyframes shimmerSweep {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: -220% 0;
+  }
+}
