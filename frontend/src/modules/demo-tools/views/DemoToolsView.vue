@@ -130,7 +130,7 @@ function closeAlbumNow() {
         >
       </div>
       <p class="text-ink-faint my-3.5 text-xs leading-relaxed">
-        With 86 slots, reaching a milestone one pack at a time isn't demoable live — grants
+        With 80 slots, reaching a milestone one pack at a time isn't demoable live — grants
         whatever's needed to jump straight to a checkpoint.
       </p>
       <div class="flex flex-wrap items-center gap-2.5">

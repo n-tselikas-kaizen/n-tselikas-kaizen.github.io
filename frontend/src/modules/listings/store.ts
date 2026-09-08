@@ -30,7 +30,7 @@ export const useListingsStore = defineStore('listings', () => {
   /** Mocked "other players'" listings for this album — seeded, not backed by a real second account's ledger. */
   const marketListings = reactive<MarketListing[]>([
     { id: 'm1', seller: 'NileRunner88', subjectIndex: 0, rarity: 2, price: 2.5 },
-    { id: 'm2', seller: 'ScarabQueen', subjectIndex: 6, rarity: 3, price: 5.5 },
+    { id: 'm2', seller: 'ScarabQueen', subjectIndex: 6, rarity: 4, price: 5.5 },
     { id: 'm3', seller: 'PharaohFan', subjectIndex: 3, rarity: 1, price: 0.9 },
     { id: 'm4', seller: 'DeltaDrifter', subjectIndex: 7, rarity: 4, price: 16.0 },
     { id: 'm5', seller: 'SandStormer', subjectIndex: 1, rarity: 2, price: 2.2 },

@@ -18,10 +18,9 @@ function buildAlbumSlots(): AlbumSlot[] {
   const cards = useCardsStore()
   const slots: AlbumSlot[] = []
   cards.subjects.forEach((_s, si) => {
-    const maxR = cards.subjectMaxRarity(si)
-    for (let ri = 0; ri <= maxR; ri++) {
+    cards.slotRarities(si).forEach((ri) => {
       slots.push({ subjectIndex: si, rarity: ri, filled: false, claimed: false })
-    }
+    })
   })
   return slots
 }

@@ -13,64 +13,106 @@ export const CATEGORY_GLYPH: Record<string, string> = {
 export const THEME_ICON = '𓂀'
 
 /**
- * Catalog — Revision v2. 24 games + 10 providers = 34 subjects → 86 total
- * slots (2×5 + 5×4 + 10×3 + 9×2 + 8×1). Ranking is a hand-picked placeholder
- * pending real play/spin data.
+ * Catalog — Revision v4. 45 games + 14 providers = 59 subjects → 80 total
+ * slots. Each subject has exactly one base card (Common/Uncommon/Rare for
+ * games by play-popularity thirds, always Uncommon for providers); the top
+ * performers within that top tier additionally get a single Epic or
+ * Legendary duplicate of the same card with richer illustration. Ranking is
+ * a hand-picked placeholder pending real play/spin data. The block below
+ * appends the Revision v4 catalog expansion — existing subjects keep their
+ * original slots untouched, so nothing that already referenced them by index
+ * shifts or changes tier.
  */
 export const SUBJECTS: Subject[] = [
-  // ---- Band 0 — top 5% (5 slots: Common → Legendary) ----
-  { name: 'Book of Dead', provider: "Play'n GO", cat: 'CLASSIC', band: 0 },
-  { name: 'Book of Ra Deluxe', provider: 'Novomatic', cat: 'CLASSIC', band: 0 },
-  // ---- Band 1 — next 15% (4 slots: Common → Epic) ----
-  { name: "Play'n GO", provider: "Play'n GO", cat: 'PROVIDER', band: 1 },
-  { name: 'Pragmatic Play', provider: 'Pragmatic Play', cat: 'PROVIDER', band: 1 },
-  { name: 'Legacy of Dead', provider: "Play'n GO", cat: 'FEATURE', band: 1 },
-  { name: 'Cleopatra', provider: 'IGT', cat: 'CLASSIC', band: 1 },
-  { name: 'Novomatic / Amusnet', provider: 'Novomatic', cat: 'PROVIDER', band: 1 },
-  // ---- Band 2 — next 30% (3 slots: Common → Rare) ----
-  { name: 'IGT', provider: 'IGT', cat: 'PROVIDER', band: 2 },
-  { name: 'Eye of Horus', provider: 'Gamomat', cat: 'FEATURE', band: 2 },
-  { name: 'Gamomat', provider: 'Gamomat', cat: 'PROVIDER', band: 2 },
-  { name: 'Cleopatra II', provider: 'IGT', cat: 'CLASSIC', band: 2 },
-  { name: 'MegaJackpots Cleopatra', provider: 'IGT', cat: 'JACKPOT', band: 2 },
-  { name: 'Ramses Book', provider: 'Gamomat', cat: 'CLASSIC', band: 2 },
+  // ---- Games: top third (Rare) — top 2 also Legendary, next 4 also Epic ----
+  { name: 'Book of Dead', provider: "Play'n GO", cat: 'CLASSIC', slots: [2, 4] },
+  { name: 'Book of Ra Deluxe', provider: 'Novomatic', cat: 'CLASSIC', slots: [2, 4] },
+  // ---- Providers: top 3 (Legendary duplicate), next 4 (Epic duplicate), rest plain Uncommon ----
+  { name: "Play'n GO", provider: "Play'n GO", cat: 'PROVIDER', slots: [1, 4] },
+  { name: 'Pragmatic Play', provider: 'Pragmatic Play', cat: 'PROVIDER', slots: [1, 4] },
+  { name: 'Legacy of Dead', provider: "Play'n GO", cat: 'FEATURE', slots: [2, 3] },
+  { name: 'Cleopatra', provider: 'IGT', cat: 'CLASSIC', slots: [2, 3] },
+  { name: 'Novomatic / Amusnet', provider: 'Novomatic', cat: 'PROVIDER', slots: [1, 4] },
+  { name: 'IGT', provider: 'IGT', cat: 'PROVIDER', slots: [1, 3] },
+  { name: 'Eye of Horus', provider: 'Gamomat', cat: 'FEATURE', slots: [2, 3] },
+  { name: 'Gamomat', provider: 'Gamomat', cat: 'PROVIDER', slots: [1, 3] },
+  { name: 'Cleopatra II', provider: 'IGT', cat: 'CLASSIC', slots: [2, 3] },
+  // ---- Games: top third (Rare), no Epic/Legendary duplicate ----
+  { name: 'MegaJackpots Cleopatra', provider: 'IGT', cat: 'JACKPOT', slots: [2] },
+  { name: 'Ramses Book', provider: 'Gamomat', cat: 'CLASSIC', slots: [2] },
+  // ---- Games: middle third (Uncommon) ----
   {
     name: 'John Hunter and the Tomb of the Scarab Queen',
     provider: 'Pragmatic Play',
     cat: 'BONUS BUY',
-    band: 2,
+    slots: [1],
   },
-  { name: 'Sun of Egypt 3', provider: 'Bgaming', cat: 'MEGAWAYS', band: 2 },
-  { name: 'Egyptian Rebirth II', provider: 'Spinomenal', cat: 'CLASSIC', band: 2 },
-  { name: 'Rise of Dead', provider: "Play'n GO", cat: 'CLASSIC', band: 2 },
-  // ---- Band 3 — next 25% (2 slots: Common → Uncommon) ----
-  { name: 'Spinomenal', provider: 'Spinomenal', cat: 'PROVIDER', band: 3 },
-  { name: 'Bgaming', provider: 'Bgaming', cat: 'PROVIDER', band: 3 },
-  { name: 'Book of Ra Deluxe 6', provider: 'Novomatic', cat: 'CLASSIC', band: 3 },
-  { name: 'Ramses II Deluxe', provider: 'Novomatic', cat: 'CLASSIC', band: 3 },
-  { name: 'Eye of Horus Megaways', provider: 'Gamomat', cat: 'MEGAWAYS', band: 3 },
+  { name: 'Sun of Egypt 3', provider: 'Bgaming', cat: 'MEGAWAYS', slots: [1] },
+  { name: 'Egyptian Rebirth II', provider: 'Spinomenal', cat: 'CLASSIC', slots: [1] },
+  { name: 'Rise of Dead', provider: "Play'n GO", cat: 'CLASSIC', slots: [1] },
+  { name: 'Spinomenal', provider: 'Spinomenal', cat: 'PROVIDER', slots: [1, 3] },
+  { name: 'Bgaming', provider: 'Bgaming', cat: 'PROVIDER', slots: [1, 3] },
+  { name: 'Book of Ra Deluxe 6', provider: 'Novomatic', cat: 'CLASSIC', slots: [1] },
+  { name: 'Ramses II Deluxe', provider: 'Novomatic', cat: 'CLASSIC', slots: [1] },
+  { name: 'Eye of Horus Megaways', provider: 'Gamomat', cat: 'MEGAWAYS', slots: [1] },
   {
     name: 'John Hunter and the Book of Tut',
     provider: 'Pragmatic Play',
     cat: 'BONUS BUY',
-    band: 3,
+    slots: [1],
   },
-  { name: 'Booming Games', provider: 'Booming Games', cat: 'PROVIDER', band: 3 },
-  { name: 'Games Global', provider: 'Games Global', cat: 'PROVIDER', band: 3 },
-  { name: 'Egyptian Rebirth', provider: 'Spinomenal', cat: 'CLASSIC', band: 3 },
-  // ---- Band 4 — remaining 25% (1 slot: Common only) ----
-  { name: 'Sun of Egypt 2', provider: 'Bgaming', cat: 'MEGAWAYS', band: 4 },
-  { name: 'Cleocatra', provider: 'Pragmatic Play', cat: 'CLASSIC', band: 4 },
-  { name: 'NetEnt', provider: 'NetEnt', cat: 'PROVIDER', band: 4 },
-  { name: 'Pyramid: Quest for Immortality', provider: 'NetEnt', cat: 'JACKPOT', band: 4 },
-  { name: 'Book of Gold', provider: 'Booming Games', cat: 'CLASSIC', band: 4 },
-  { name: 'Ancient Egypt Classic', provider: 'Games Global', cat: 'CLASSIC', band: 4 },
-  { name: 'Book of Gold: Multichance', provider: 'Booming Games', cat: 'FEATURE', band: 4 },
-  { name: 'Ancient Egypt Classic Jackpot King', provider: 'Games Global', cat: 'JACKPOT', band: 4 },
+  { name: 'Booming Games', provider: 'Booming Games', cat: 'PROVIDER', slots: [1] },
+  { name: 'Games Global', provider: 'Games Global', cat: 'PROVIDER', slots: [1] },
+  // ---- Games: bottom third (Common) ----
+  { name: 'Egyptian Rebirth', provider: 'Spinomenal', cat: 'CLASSIC', slots: [0] },
+  { name: 'Sun of Egypt 2', provider: 'Bgaming', cat: 'MEGAWAYS', slots: [0] },
+  { name: 'Cleocatra', provider: 'Pragmatic Play', cat: 'CLASSIC', slots: [0] },
+  { name: 'NetEnt', provider: 'NetEnt', cat: 'PROVIDER', slots: [1] },
+  { name: 'Pyramid: Quest for Immortality', provider: 'NetEnt', cat: 'JACKPOT', slots: [0] },
+  { name: 'Book of Gold', provider: 'Booming Games', cat: 'CLASSIC', slots: [0] },
+  { name: 'Ancient Egypt Classic', provider: 'Games Global', cat: 'CLASSIC', slots: [0] },
+  { name: 'Book of Gold: Multichance', provider: 'Booming Games', cat: 'FEATURE', slots: [0] },
+  {
+    name: 'Ancient Egypt Classic Jackpot King',
+    provider: 'Games Global',
+    cat: 'JACKPOT',
+    slots: [0],
+  },
+  // ---- Revision v4 expansion — new games, Rare base + Epic/Legendary duplicate ----
+  { name: 'Legacy of Egypt', provider: "Play'n GO", cat: 'CLASSIC', slots: [2, 3] },
+  { name: 'Riches of Ra', provider: "Play'n GO", cat: 'CLASSIC', slots: [2, 4] },
+  { name: "Pharaoh's Fortune", provider: 'IGT', cat: 'CLASSIC', slots: [2, 3] },
+  { name: 'Ramesses Riches', provider: 'Games Global', cat: 'JACKPOT', slots: [2, 3] },
+  { name: 'Fortunes of Egypt', provider: 'Blueprint Gaming', cat: 'CLASSIC', slots: [2, 3] },
+  // ---- Revision v4 expansion — new games, middle third (Uncommon) ----
+  { name: "Pharaoh's Gold III", provider: 'Novomatic', cat: 'CLASSIC', slots: [1] },
+  {
+    name: 'John Hunter and the Egyptian Book of Mystery',
+    provider: 'Pragmatic Play',
+    cat: 'BONUS BUY',
+    slots: [1],
+  },
+  { name: 'Eye of Horus Golden Nights Bonus', provider: 'Gamomat', cat: 'FEATURE', slots: [1] },
+  { name: 'Nile Fortune', provider: 'NetEnt', cat: 'JACKPOT', slots: [1] },
+  { name: 'Egyptian Dreams', provider: 'Amatic', cat: 'CLASSIC', slots: [1] },
+  { name: 'Egyptian Dreams Deluxe', provider: 'Amatic', cat: 'FEATURE', slots: [1] },
+  { name: 'Coins of Egypt', provider: 'Booongo', cat: 'BONUS BUY', slots: [1] },
+  { name: 'Legend of Cleopatra', provider: 'Booongo', cat: 'JACKPOT', slots: [1] },
+  // ---- Revision v4 expansion — new games, bottom third (Common) ----
+  { name: 'Anubis Rising', provider: 'Gamomat', cat: 'FEATURE', slots: [0] },
+  { name: "Pharaoh's Rebirth", provider: 'Spinomenal', cat: 'FEATURE', slots: [0] },
+  { name: 'Scarab Rebirth', provider: 'Spinomenal', cat: 'CLASSIC', slots: [0] },
+  { name: 'Sands of Giza', provider: 'Bgaming', cat: 'MEGAWAYS', slots: [0] },
+  { name: 'Golden Osiris', provider: 'Booming Games', cat: 'FEATURE', slots: [0] },
+  { name: 'Rise of Egypt', provider: 'EGT', cat: 'CLASSIC', slots: [0] },
+  { name: '40 Egypt', provider: 'EGT', cat: 'CLASSIC', slots: [0] },
+  { name: 'Fortunes of Egypt Megaways', provider: 'Blueprint Gaming', cat: 'MEGAWAYS', slots: [0] },
+  // ---- Revision v4 expansion — new providers ----
+  { name: 'EGT', provider: 'EGT', cat: 'PROVIDER', slots: [1, 4] },
+  { name: 'Blueprint Gaming', provider: 'Blueprint Gaming', cat: 'PROVIDER', slots: [1, 3] },
+  { name: 'Amatic', provider: 'Amatic', cat: 'PROVIDER', slots: [1, 3] },
+  { name: 'Booongo', provider: 'Booongo', cat: 'PROVIDER', slots: [1] },
 ]
-
-/** Band → highest rarity index that subject supports as an album slot (0=Common..4=Legendary). */
-export const BAND_MAX_RARITY = [4, 3, 2, 1, 0]
 
 export const EPIC_SPARK_STYLES = ['top:-6px; left:22%;', 'bottom:-6px; left:68%;']
 

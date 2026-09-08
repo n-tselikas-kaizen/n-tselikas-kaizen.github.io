@@ -92,13 +92,14 @@ export const useAchievementsStore = defineStore('achievements', () => {
       case 'every-subject-started': {
         const albums = useAlbumsStore()
         const cards = useCardsStore()
-        const allStarted = cards.subjects.every((_s, si) => {
-          const slot = albums.getSlot(si, 0)
+        const allStarted = cards.subjects.every((s, si) => {
+          const baseRarity = Math.min(...s.slots)
+          const slot = albums.getSlot(si, baseRarity)
           return !!slot && slot.filled
         })
         return {
           unlocked: allStarted,
-          progress: allStarted ? 'Unlocked' : 'Own at least the Common card for every subject.',
+          progress: allStarted ? 'Unlocked' : 'Own at least the base card for every subject.',
         }
       }
       case 'album-milestone': {

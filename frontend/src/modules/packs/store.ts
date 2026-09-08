@@ -45,7 +45,7 @@ export const usePacksStore = defineStore('packs', () => {
     const pulls: Pull[] = []
     for (let i = 0; i < 5; i++) {
       const rarity = weightedDraw(PACK_ODDS)
-      const subjectIndex = Math.floor(Math.random() * cards.subjects.length)
+      const subjectIndex = cards.randomSubjectAtRarity(rarity)
       pulls.push({ subjectIndex, rarity, isNewFill: false })
     }
 

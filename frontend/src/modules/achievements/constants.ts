@@ -96,7 +96,7 @@ const SEED: AchievementSeed[] = [
     group: 'album',
     kind: 'every-subject-started',
     name: 'Full House',
-    desc: 'Own at least the Common card for every subject in this album — breadth, not depth.',
+    desc: 'Own at least the base card for every subject in this album — breadth, not depth.',
     rarity: 'common',
     glyph: '▦',
     reward: 'badge',

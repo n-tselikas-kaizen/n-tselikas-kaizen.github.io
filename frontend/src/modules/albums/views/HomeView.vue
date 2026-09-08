@@ -145,7 +145,7 @@ const progressText = computed(
     <p class="text-ink-faint border-line mt-8 border-t pt-3.5 text-[11px] leading-relaxed">
       Prototype for internal review. Game names, provider names, odds, and reward amounts are
       placeholders — not final economy numbers or confirmed licensing. All data is synthetic.<br />
-      Build: 2026-09-07-f · 86 slots
+      Build: 2026-09-08-b · 80 slots
     </p>
   </div>
 </template>

@@ -33,7 +33,7 @@ const categoryGlyph = computed(() => CATEGORY_GLYPH[subject.value.cat] || THEME_
 const borderStyle = computed(() =>
   props.filled
     ? { borderColor: rarity.value.color, boxShadow: `0 0 12px ${rarity.value.color}73` }
-    : {},
+    : { borderColor: 'var(--color-line-strong)' },
 )
 </script>
 

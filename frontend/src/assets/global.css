@@ -44,15 +44,25 @@
   --album-cols: 3;
 }
 
-@media (max-width: 1079px) {
+/* Album grid: 3 columns is the floor at every size; scales up to 5 on desktop. */
+@media (max-width: 420px) {
   :root {
-    --album-cols: 2;
+    --card-w-grid: 96px;
   }
 }
-@media (max-width: 480px) {
+@media (min-width: 421px) and (max-width: 767px) {
   :root {
-    --album-cols: 3;
-    --card-w-grid: 96px;
+    --card-w-grid: 130px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --album-cols: 4;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --album-cols: 5;
   }
 }
 @media (max-width: 420px) {

@@ -2,13 +2,15 @@ export type SubjectCategory =
   'CLASSIC' | 'FEATURE' | 'JACKPOT' | 'MEGAWAYS' | 'BONUS BUY' | 'PROVIDER'
 
 /**
- * A game or provider in the catalog. `band` (0 = top popularity, 4 = bottom)
- * is the only thing that determines how many rarity slots it gets in an
- * album — see BAND_MAX_RARITY.
+ * A game or provider in the catalog. `slots` lists the exact rarity indices
+ * (0=Common..4=Legendary) this subject has an album card for — popularity
+ * decides one base rarity (Common/Uncommon/Rare for games, always Uncommon
+ * for providers), and only the top performers additionally get a single
+ * Epic or Legendary duplicate of that same card with richer art.
  */
 export interface Subject {
   name: string
   provider: string
   cat: SubjectCategory
-  band: 0 | 1 | 2 | 3 | 4
+  slots: number[]
 }
